@@ -1,0 +1,28 @@
+.modal__content.modal__content_type_image {
+  max-width: 498px;
+  padding: 0;
+}
+.modal__image {
+  width: 100%;
+  background-size: cover;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+}
+.modal__footer {
+  margin: 20px 32px 32px;
+}
+.modal__caption {
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  width: 36px;
+  margin: 0 0 12px;
+}
+.modal__weather {
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 24px;
+  margin: 0;
+}

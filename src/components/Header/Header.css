@@ -4,17 +4,26 @@
   padding: 32px 0 28px;
 }
 .header__logo {
-  margin-right: 24px;
-}
-.header__date-and-location {
+  display: flex;
   margin: 0;
+  align-items: center;
+}
+
+.header__date-and-location {
+  margin: 0 0 0 24px;
   font-family: "Cabinet Grotesk", Arial, sans-serif;
   font-size: 20px;
   color: rgba(0, 0, 0, 1);
   font-weight: 700;
 }
+.header__avatar-container {
+  display: flex;
+  margin: 0 0 0 auto;
+  align-items: center;
+}
 .header__add-clothes-btn {
-  margin: 0 20px 0 auto;
+  margin: 0 20px 0 20px;
+  padding: 0;
   font-family: "Cabinet Grotesk", Arial, sans-serif;
   color: rgba(0, 0, 0, 1);
   font-size: 20px;

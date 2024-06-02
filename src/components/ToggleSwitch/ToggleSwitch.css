@@ -1,0 +1,60 @@
+.switch {
+  display: flex;
+  position: relative;
+  cursor: pointer;
+}
+.switch__box {
+  border-radius: 25px;
+  border: 2px solid #7e7e7e;
+  width: 56px;
+  height: 28px;
+  appearance: none;
+  cursor: pointer;
+}
+.switch__box:hover {
+  border: 2px solid black;
+}
+.switch__slider {
+  border-radius: 20px;
+  width: 28px;
+  height: 28px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+  position: absolute;
+}
+.switch__slider-F {
+  left: 0;
+}
+.switch__slider-C {
+  left: 28px;
+  cursor: pointer;
+}
+.switch__active {
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+}
+.switch__temp-F {
+  position: absolute;
+  top: -8px;
+  left: 10px;
+  font-size: 14px;
+  font-family: "'Cabinet Grotesk'", Arial, sans-serif;
+}
+.switch__temp-F:not(.switch__active) {
+  color: #00000080;
+}
+.switch__temp-C {
+  position: absolute;
+  top: -8px;
+  left: 36px;
+  font-size: 14px;
+  font-family: "'Cabinet Grotesk'", Arial, sans-serif;
+}
+.switch__temp-C:not(.switch__active) {
+  color: #00000080;
+}
+/* NEED ADDING ANIMATION TO TOGGLE SWITCH*/

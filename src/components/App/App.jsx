@@ -9,8 +9,9 @@ import Main from "../Main/Main";
 import ItemModal from "../ItemModal/ItemModal";
 import { getWeather, filterweatherData } from "../../utils/weatherApi";
 import CurrentTempChangeUnitContext from "../../CurrentTempChangeUnitContext";
-import AddItemModal from "../../AddItemModal/AddItemModal";
-import { getItems } from "../../utils/api";
+import AddItemModal from "../AddItemModal/AddItemModal";
+import { getItems, addCard } from "../../utils/api";
+import { error } from "jquery";
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -32,14 +33,24 @@ function App() {
   };
   const closeActiveModal = () => {
     setActiveModal("");
+    f;
   };
   const handleToggleSwitchChange = () => {
     if (currentTempChangeUnit === "C") setCurrentTempChangeUnit("F");
     if (currentTempChangeUnit === "F") setCurrentTempChangeUnit("C");
   };
 
-  const onAddItem = (values) => {
-    console.log(values);
+  // const onAddItem = (values) => {
+  //   console.log(values);
+  // };
+  const handleAddItemSubmit = (item) => {
+    addCard(item)
+      .then((newItem) => {
+        setClothingItems([newItem, ...clothingItems]);
+      })
+      .catch((error) => {
+        console.error("failed uploading card", error);
+      });
   };
 
   useEffect(() => {
@@ -80,7 +91,12 @@ function App() {
             />
             <Route
               path="/profile"
-              element={<Profile handleCardClick={handleCardClick} />}
+              element={
+                <Profile
+                  handleCardClick={handleCardClick}
+                  clothingItems={clothingItems}
+                />
+              }
             />
           </Routes>
 
@@ -89,7 +105,7 @@ function App() {
         <AddItemModal
           closeActiveModal={closeActiveModal}
           isOpen={activeModal === "add-garment"}
-          onAddItem={onAddItem}
+          onAddItem={handleAddItemSubmit}
         />
         <ItemModal
           activeModal={activeModal}

@@ -1,26 +1,25 @@
 import React, { useState } from "react";
-import ModalWithForm from "../components/ModalWithForm/ModalWithForm";
+import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
 const AddItemModal = ({ closeActiveModal, onAddItem, isOpen }) => {
   const [name, setName] = useState("");
+  const [link, setLink] = useState("");
+
   const handleNameChange = (e) => {
-    console.log(e.target.value);
     setName(e.target.value);
   };
-  const [url, setUrl] = useState("");
   const handleUrlChange = (e) => {
-    console.log(e.target.value);
-    setUrl(e.target.value);
+    setLink(e.target.value);
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    onAddItem({ name, url });
+    onAddItem({ name, link });
   };
   return (
     <ModalWithForm
       handleCloseClick={closeActiveModal}
-      isOpen={isOpen}
       onSubmit={handleSubmit}
+      isOpen={isOpen}
       title="New garment"
       buttonText="Add garment"
     >
@@ -42,7 +41,7 @@ const AddItemModal = ({ closeActiveModal, onAddItem, isOpen }) => {
           className="modal__input"
           id="ImageUrl"
           placeholder="Image URL"
-          value={url}
+          value={link}
           onChange={handleUrlChange}
         />
       </label>

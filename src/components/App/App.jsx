@@ -10,7 +10,7 @@ import ItemModal from "../ItemModal/ItemModal";
 import { getWeather, filterweatherData } from "../../utils/weatherApi";
 import CurrentTempChangeUnitContext from "../../CurrentTempChangeUnitContext";
 import AddItemModal from "../AddItemModal/AddItemModal";
-import { getItems, addCard } from "../../utils/api";
+import { getItems, addItem } from "../../utils/api";
 import { error } from "jquery";
 
 function App() {
@@ -33,7 +33,6 @@ function App() {
   };
   const closeActiveModal = () => {
     setActiveModal("");
-    f;
   };
   const handleToggleSwitchChange = () => {
     if (currentTempChangeUnit === "C") setCurrentTempChangeUnit("F");
@@ -44,9 +43,10 @@ function App() {
   //   console.log(values);
   // };
   const handleAddItemSubmit = (item) => {
-    addCard(item)
+    addItem(item)
       .then((newItem) => {
         setClothingItems([newItem, ...clothingItems]);
+        closeActiveModal();
       })
       .catch((error) => {
         console.error("failed uploading card", error);

@@ -5,16 +5,16 @@ const checkErrorr = (res) => {
 function getItems() {
   return fetch(`${baseUrl}/items`).then(checkErrorr);
 }
-function addCard({ name, link }) {
-  return fetch(`${baseUrl}/cards`, {
+function addItem({ name, imageUrl }) {
+  return fetch(`${baseUrl}/items`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
       name,
-      link,
+      imageUrl,
     }),
   }).then(checkErrorr);
 }
-export { getItems, addCard };
+export { getItems, addItem };

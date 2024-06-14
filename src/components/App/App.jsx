@@ -10,7 +10,7 @@ import ItemModal from "../ItemModal/ItemModal";
 import { getWeather, filterweatherData } from "../../utils/weatherApi";
 import CurrentTempChangeUnitContext from "../../CurrentTempChangeUnitContext";
 import AddItemModal from "../AddItemModal/AddItemModal";
-import { getItems, addItem } from "../../utils/api";
+import { getItems, addItem, deleteItem } from "../../utils/api";
 import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -33,17 +33,18 @@ function App() {
   const handleDeleteClick = () => {
     setActiveModal("delete-garment");
   };
-  const closeActiveModal = () => {
-    setActiveModal("");
+  const handleDeleteItem = (itemId) => {
+    deleteItem(itemId)
+      .then(() => {
+        setClothingItems((prevItem) =>
+          prevItem.filter((item) => item._id !== itemId)
+        );
+        closeActiveModal();
+      })
+      .catch((error) => {
+        console.error("Failed to delete item:", error);
+      });
   };
-  const handleToggleSwitchChange = () => {
-    if (currentTempChangeUnit === "C") setCurrentTempChangeUnit("F");
-    if (currentTempChangeUnit === "F") setCurrentTempChangeUnit("C");
-  };
-
-  // const onAddItem = (values) => {
-  //   console.log(values);
-  // };
   const handleAddItemSubmit = (item) => {
     addItem(item)
       .then((newItem) => {
@@ -53,6 +54,13 @@ function App() {
       .catch((error) => {
         console.error("failed uploading card", error);
       });
+  };
+  const closeActiveModal = () => {
+    setActiveModal("");
+  };
+  const handleToggleSwitchChange = () => {
+    if (currentTempChangeUnit === "C") setCurrentTempChangeUnit("F");
+    if (currentTempChangeUnit === "F") setCurrentTempChangeUnit("C");
   };
 
   useEffect(() => {
@@ -121,6 +129,7 @@ function App() {
           <DeleteConfirmModal
             activeModal={activeModal}
             handleCloseClick={closeActiveModal}
+            onDelete={handleDeleteItem}
           />
         )}
       </CurrentTempChangeUnitContext.Provider>

@@ -18,8 +18,8 @@ function addItem({ name, imageUrl, weather }) {
     }),
   }).then(checkErrorr);
 }
-function deleteItem() {
-  return fetch(`${baseUrl}/items/:id`, {
+function deleteItem({ itemId }) {
+  return fetch(`${baseUrl}/items/${itemId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

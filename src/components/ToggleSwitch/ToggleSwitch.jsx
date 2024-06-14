@@ -11,7 +11,6 @@ const ToggleSwitch = () => {
   const { currentTempChangeUnit, handleToggleSwitchChange } = useContext(
     CurrentTempChangeUnitContext
   );
-  console.log(currentTempChangeUnit);
   return (
     <label className="switch">
       <input

@@ -33,11 +33,11 @@ function App() {
   const handleDeleteClick = () => {
     setActiveModal("delete-garment");
   };
-  const handleDeleteItem = (itemId) => {
-    deleteItem(itemId)
+  const handleDeleteItem = () => {
+    deleteItem(selectedCard._id)
       .then(() => {
         setClothingItems((prevItem) =>
-          prevItem.filter((item) => item._id !== itemId)
+          prevItem.filter((item) => item._id !== selectedCard._id)
         );
         closeActiveModal();
       })
@@ -79,7 +79,6 @@ function App() {
       })
       .catch(console.error);
   }, []);
-  //console.log(currentTempChangeUnit);
   return (
     <div className="app">
       <CurrentTempChangeUnitContext.Provider

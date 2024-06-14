@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
+import UseEscape from "../UseEscape/UseEscape";
 
 const AddItemModal = ({ closeActiveModal, onAddItem, isOpen }) => {
   const [name, setName] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [weather, setWeather] = useState("");
   const [isFormValid, setIsFormValid] = useState(false);
-
+  UseEscape(closeActiveModal);
   useEffect(() => {
     if (isOpen) {
       setName("");

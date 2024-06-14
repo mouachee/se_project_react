@@ -11,8 +11,7 @@ import { getWeather, filterweatherData } from "../../utils/weatherApi";
 import CurrentTempChangeUnitContext from "../../CurrentTempChangeUnitContext";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import { getItems, addItem } from "../../utils/api";
-import { error } from "jquery";
-
+import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
 function App() {
   const [weatherData, setWeatherData] = useState({
     type: "",
@@ -30,6 +29,9 @@ function App() {
   };
   const handleAddClick = () => {
     setActiveModal("add-garment");
+  };
+  const handleDeleteClick = () => {
+    setActiveModal("delete-garment");
   };
   const closeActiveModal = () => {
     setActiveModal("");
@@ -107,11 +109,20 @@ function App() {
           isOpen={activeModal === "add-garment"}
           onAddItem={handleAddItemSubmit}
         />
-        <ItemModal
-          activeModal={activeModal}
-          card={selectedCard}
-          handleCloseClick={closeActiveModal}
-        />
+        {activeModal === "preview" && (
+          <ItemModal
+            activeModal={activeModal}
+            card={selectedCard}
+            handleCloseClick={closeActiveModal}
+            handleDeleteClick={handleDeleteClick}
+          />
+        )}
+        {activeModal === "delete-garment" && (
+          <DeleteConfirmModal
+            activeModal={activeModal}
+            handleCloseClick={closeActiveModal}
+          />
+        )}
       </CurrentTempChangeUnitContext.Provider>
     </div>
   );

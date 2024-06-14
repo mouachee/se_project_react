@@ -89,10 +89,17 @@
   font-weight: 700;
   font-size: 16px;
   color: rgba(255, 255, 255, 1);
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: #000;
   border: none;
   border-radius: 4px;
   margin-top: 32px;
   width: 124px;
   height: 36px;
+  cursor: pointer;
+}
+.modal__submit_disabled {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.modal__submit:hover {
+  background-color: #00000099;
 }

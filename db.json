@@ -97,35 +97,28 @@
       "imageUrl": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/Sweatshirt.png?etag=008a9674757bea2e0bdb31242e364be0"
     },
     {
-      "_id": 16,
-      "name": "T-Shirt",
-      "weather": "hot",
-      "imageUrl": "https://practicum-content.s3.us-west-1.amazonaws.com/software-engineer/wtwr-project/T-Shirt.png?etag=44ed1963c44ab19cd2f5011522c5fc09"
+      "name": "jacket",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT54t8zFJTGSYnX-SFTNJjaowYPEAKIpnw4Qw&s",
+      "weather": "warm",
+      "_id": 16
     },
     {
       "name": "jacket",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT54t8zFJTGSYnX-SFTNJjaowYPEAKIpnw4Qw&s",
+      "weather": "warm",
       "_id": 17
     },
     {
       "name": "jacket",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT54t8zFJTGSYnX-SFTNJjaowYPEAKIpnw4Qw&s",
+      "weather": "hot",
       "_id": 18
     },
     {
       "name": "jacket",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT54t8zFJTGSYnX-SFTNJjaowYPEAKIpnw4Qw&s",
+      "weather": "warm",
       "_id": 19
-    },
-    {
-      "name": "jacket",
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT54t8zFJTGSYnX-SFTNJjaowYPEAKIpnw4Qw&s",
-      "_id": 20
-    },
-    {
-      "name": "jacket",
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT54t8zFJTGSYnX-SFTNJjaowYPEAKIpnw4Qw&s",
-      "_id": 21
     }
   ]
 }

@@ -5,7 +5,7 @@ const checkErrorr = (res) => {
 function getItems() {
   return fetch(`${baseUrl}/items`).then(checkErrorr);
 }
-function addItem({ name, imageUrl }) {
+function addItem({ name, imageUrl, weather }) {
   return fetch(`${baseUrl}/items`, {
     method: "POST",
     headers: {
@@ -14,7 +14,16 @@ function addItem({ name, imageUrl }) {
     body: JSON.stringify({
       name,
       imageUrl,
+      weather,
     }),
   }).then(checkErrorr);
 }
-export { getItems, addItem };
+function deleteItem() {
+  return fetch(`${baseUrl}/items/:id`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then(checkErrorr);
+}
+export { getItems, addItem, deleteItem };

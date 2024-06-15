@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const UseEscape = (onEscape) => {
+const useEscape = (onEscape) => {
   useEffect(() => {
     const handleEscape = (evt) => {
       if (evt.key === "Escape") {
@@ -13,4 +13,4 @@ const UseEscape = (onEscape) => {
     };
   }, []);
 };
-export default UseEscape;
+export default useEscape;

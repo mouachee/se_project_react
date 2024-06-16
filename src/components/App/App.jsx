@@ -78,7 +78,6 @@ function App() {
       })
       .catch(console.error);
   }, []);
-  use;
   return (
     <div className="app">
       <CurrentTempChangeUnitContext.Provider

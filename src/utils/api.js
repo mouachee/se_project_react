@@ -1,9 +1,9 @@
 const baseUrl = "http://localhost:3001";
-const checkErrorr = (res) => {
+export const checkError = (res) => {
   return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
 };
 function getItems() {
-  return fetch(`${baseUrl}/items`).then(checkErrorr);
+  return fetch(`${baseUrl}/items`).then(checkError);
 }
 function addItem({ name, imageUrl, weather }) {
   return fetch(`${baseUrl}/items`, {
@@ -16,7 +16,7 @@ function addItem({ name, imageUrl, weather }) {
       imageUrl,
       weather,
     }),
-  }).then(checkErrorr);
+  }).then(checkError);
 }
 function deleteItem(itemId) {
   return fetch(`${baseUrl}/items/${itemId}`, {
@@ -24,6 +24,6 @@ function deleteItem(itemId) {
     headers: {
       "Content-Type": "application/json",
     },
-  }).then(checkErrorr);
+  }).then(checkError);
 }
 export { getItems, addItem, deleteItem };

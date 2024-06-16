@@ -59,8 +59,7 @@ function App() {
     setActiveModal("");
   };
   const handleToggleSwitchChange = () => {
-    if (currentTempChangeUnit === "C") setCurrentTempChangeUnit("F");
-    if (currentTempChangeUnit === "F") setCurrentTempChangeUnit("C");
+    setCurrentTempChangeUnit(currentTempChangeUnit === "F" ? "C" : "F");
   };
 
   useEffect(() => {
@@ -79,6 +78,7 @@ function App() {
       })
       .catch(console.error);
   }, []);
+  use;
   return (
     <div className="app">
       <CurrentTempChangeUnitContext.Provider

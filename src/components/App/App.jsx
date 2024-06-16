@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
+import useEscape from "../../hooks/useEscape";
 import Profile from "../Profile/Profile";
 import { coordinates, APIkey } from "../../utils/constants";
 import Header from "../Header/Header";
@@ -58,6 +59,8 @@ function App() {
   const closeActiveModal = () => {
     setActiveModal("");
   };
+  useEscape(closeActiveModal);
+
   const handleToggleSwitchChange = () => {
     setCurrentTempChangeUnit(currentTempChangeUnit === "F" ? "C" : "F");
   };

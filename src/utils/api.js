@@ -6,10 +6,13 @@ function getItems() {
   return fetch(`${baseUrl}/items`).then(checkError);
 }
 function addItem({ name, imageUrl, weather }) {
+  const token = localStorage.getItem("jwt");
+
   return fetch(`${baseUrl}/items`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       name,
@@ -19,11 +22,15 @@ function addItem({ name, imageUrl, weather }) {
   }).then(checkError);
 }
 function deleteItem(itemId) {
+  const token = localStorage.getItem("jwt");
+
   return fetch(`${baseUrl}/items/${itemId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
     },
   }).then(checkError);
 }
+
 export { getItems, addItem, deleteItem };

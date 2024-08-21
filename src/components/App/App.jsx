@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
-import "./App.css";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import useEscape from "../../hooks/useEscape";
 import Profile from "../Profile/Profile";
 import { coordinates, APIkey } from "../../utils/constants";
@@ -9,20 +8,69 @@ import Footer from "../Footer/Footer";
 import Main from "../Main/Main";
 import ItemModal from "../ItemModal/ItemModal";
 import { getWeather, filterweatherData } from "../../utils/weatherApi";
-import CurrentTempChangeUnitContext from "../../CurrentTempChangeUnitContext";
+import CurrentTempChangeUnitContext from "../../contexts/CurrentTempChangeUnitContext";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
 import AddItemModal from "../AddItemModal/AddItemModal";
 import { getItems, addItem, deleteItem } from "../../utils/api";
 import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
+import Login from "../LoginModal/LoginModal";
+import Register from "../RegisterModal/RegisterModal";
+import * as auth from "../../utils/auth";
+import ProtectecRoute from "../ProtectedRoute/ProtectedRoute";
+import "./App.css";
+
 function App() {
   const [weatherData, setWeatherData] = useState({
     type: "",
     temp: { F: 999 },
     city: "",
   });
+
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTempChangeUnit, setCurrentTempChangeUnit] = useState("F");
   const [clothingItems, setClothingItems] = useState([]);
+
+  const navigate = useNavigate();
+
+  const handleRegisterClick = () => {
+    setActiveModal("register");
+  };
+  const handleRegistration = ({ name, avatar, email, password }) => {
+    console.log(" in registration");
+    auth
+      .register(name, avatar, email, password)
+      .then(() => auth.signin(email, password))
+      .then(() => {
+        setIsLoggedIn(true);
+        closeActiveModal();
+        navigate("/");
+      })
+      .catch((err) => console.error("Registration failed", err));
+  };
+
+  const handleLoginClick = () => {
+    setActiveModal("login");
+  };
+
+  const handleLogin = ({ email, password }) => {
+    if (!email || !password) {
+      return;
+    }
+    auth
+      .signin(email, password)
+      .then((res) => {
+        localStorage.setItem("jwt", res.token);
+        setIsLoggedIn(true);
+        closeActiveModal();
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Login failed", error);
+      });
+  };
 
   const handleCardClick = (card) => {
     setActiveModal("preview");
@@ -57,6 +105,7 @@ function App() {
       });
   };
   const closeActiveModal = () => {
+    console.log("closing modal");
     setActiveModal("");
   };
   useEscape(closeActiveModal);
@@ -64,6 +113,28 @@ function App() {
   const handleToggleSwitchChange = () => {
     setCurrentTempChangeUnit(currentTempChangeUnit === "F" ? "C" : "F");
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      auth
+        .checkToken(token)
+        .then((res) => {
+          if (res.valid) {
+            setIsLoggedIn(true);
+            setCurrentUser(res.user);
+          } else {
+            localStorage.removeItem("jwt");
+            setIsLoggedIn(false);
+          }
+        })
+        .catch((error) => {
+          console.error("Token validation failed", error);
+          localStorage.removeItem("jwt");
+          setIsLoggedIn(false);
+        });
+    }
+  }, []);
 
   useEffect(() => {
     getWeather(coordinates, APIkey)
@@ -81,60 +152,86 @@ function App() {
       })
       .catch(console.error);
   }, []);
+
   return (
     <div className="app">
-      <CurrentTempChangeUnitContext.Provider
-        value={{ currentTempChangeUnit, handleToggleSwitchChange }}
-      >
-        <div className="app__content">
-          <Header handleAddClick={handleAddClick} weatherData={weatherData} />
-          <Routes>
-            <Route
-              path="/"
-              element={
-                // pass clothing Items as a prop
-                <Main
-                  weatherData={weatherData}
-                  handleCardClick={handleCardClick}
-                  clothingItems={clothingItems}
-                />
-              }
+      <CurrentUserContext.Provider value={currentUser}>
+        <CurrentTempChangeUnitContext.Provider
+          value={{ currentTempChangeUnit, handleToggleSwitchChange }}
+        >
+          <div className="app__content">
+            <Header
+              handleRegisterClick={handleRegisterClick}
+              isLoggedIn={isLoggedIn}
+              handleAddClick={handleAddClick}
+              weatherData={weatherData}
+              handleLoginClick={handleLoginClick}
             />
-            <Route
-              path="/profile"
-              element={
-                <Profile
-                  handleCardClick={handleCardClick}
-                  clothingItems={clothingItems}
-                  handleAddClick={handleAddClick}
-                />
-              }
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  // pass clothing Items as a prop
+                  <Main
+                    handleCardClick={handleCardClick}
+                    weatherData={weatherData}
+                    clothingItems={clothingItems}
+                  />
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectecRoute>
+                    <Profile
+                      handleCardClick={handleCardClick}
+                      clothingItems={clothingItems}
+                      handleAddClick={handleAddClick}
+                    />
+                  </ProtectecRoute>
+                }
+              />
+            </Routes>
+            <Footer />
+          </div>
+          <AddItemModal
+            closeActiveModal={closeActiveModal}
+            isOpen={activeModal === "add-garment"}
+            onAddItem={handleAddItemSubmit}
+          />
+          {activeModal === "preview" && (
+            <ItemModal
+              activeModal={activeModal}
+              card={selectedCard}
+              handleCloseClick={closeActiveModal}
+              handleDeleteClick={handleDeleteClick}
             />
-          </Routes>
-
-          <Footer />
-        </div>
-        <AddItemModal
-          closeActiveModal={closeActiveModal}
-          isOpen={activeModal === "add-garment"}
-          onAddItem={handleAddItemSubmit}
-        />
-        {activeModal === "preview" && (
-          <ItemModal
-            activeModal={activeModal}
-            card={selectedCard}
-            handleCloseClick={closeActiveModal}
-            handleDeleteClick={handleDeleteClick}
-          />
-        )}
-        {activeModal === "delete-garment" && (
-          <DeleteConfirmModal
-            activeModal={activeModal}
-            handleCloseClick={closeActiveModal}
-            onDelete={handleDeleteItem}
-          />
-        )}
-      </CurrentTempChangeUnitContext.Provider>
+          )}
+          {activeModal === "delete-garment" && (
+            <DeleteConfirmModal
+              activeModal={activeModal}
+              handleCloseClick={closeActiveModal}
+              onDelete={handleDeleteItem}
+            />
+          )}
+          {activeModal === "login" && (
+            <Login
+              closeActiveModal={closeActiveModal}
+              activeModal={activeModal}
+              handleRegisterClick={handleRegisterClick}
+              handleLogin={handleLogin}
+            />
+          )}
+          {activeModal === "register" && (
+            <Register
+              handleRegistration={handleRegistration}
+              closeActiveModal={closeActiveModal}
+              activeModal={activeModal}
+              handleLoginClick={handleLoginClick}
+            />
+          )}
+        </CurrentTempChangeUnitContext.Provider>
+      </CurrentUserContext.Provider>
     </div>
   );
 }

@@ -43,8 +43,9 @@ function App() {
     auth
       .register(name, avatar, email, password)
       .then(() => auth.signin(email, password))
-      .then(() => {
+      .then((res) => {
         setIsLoggedIn(true);
+        setCurrentUser(res.user);
         closeActiveModal();
         navigate("/");
       })
@@ -64,6 +65,7 @@ function App() {
       .then((res) => {
         localStorage.setItem("jwt", res.token);
         setIsLoggedIn(true);
+        setCurrentUser(res.user);
         closeActiveModal();
         navigate("/");
       })
@@ -105,7 +107,6 @@ function App() {
       });
   };
   const closeActiveModal = () => {
-    console.log("closing modal");
     setActiveModal("");
   };
   useEscape(closeActiveModal);

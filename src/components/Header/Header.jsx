@@ -16,6 +16,7 @@ function Header({
     day: "numeric",
   });
   const currentUser = useContext(CurrentUserContext);
+  console.log(currentUser);
 
   return (
     <header className="header">
@@ -45,7 +46,7 @@ function Header({
                 {currentUser?.avatar ? (
                   <img
                     src={currentUser?.avatar}
-                    alt="avatar"
+                    alt={currentUser?.name}
                     className="header__avatar"
                   />
                 ) : (

@@ -16,6 +16,7 @@ import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
 import Login from "../LoginModal/LoginModal";
 import Register from "../RegisterModal/RegisterModal";
 import * as auth from "../../utils/auth";
+import { setToken, getToken, removeToken } from "../../utils/token";
 import ProtectecRoute from "../ProtectedRoute/ProtectedRoute";
 import "./App.css";
 
@@ -39,19 +40,17 @@ function App() {
     setActiveModal("register");
   };
   const handleRegistration = ({ name, avatar, email, password }) => {
-    console.log(" in registration");
     auth
       .register(name, avatar, email, password)
       .then(() => auth.signin(email, password))
-      .then((res) => {
+      .then((data) => {
         setIsLoggedIn(true);
-        setCurrentUser(res.user);
+        setCurrentUser(data);
         closeActiveModal();
         navigate("/");
       })
       .catch((err) => console.error("Registration failed", err));
   };
-
   const handleLoginClick = () => {
     setActiveModal("login");
   };
@@ -62,10 +61,10 @@ function App() {
     }
     auth
       .signin(email, password)
-      .then((res) => {
-        localStorage.setItem("jwt", res.token);
+      .then((data) => {
+        setToken(data.token);
         setIsLoggedIn(true);
-        setCurrentUser(res.user);
+        setCurrentUser(data);
         closeActiveModal();
         navigate("/");
       })
@@ -99,7 +98,7 @@ function App() {
   const handleAddItemSubmit = (item) => {
     addItem(item)
       .then((newItem) => {
-        setClothingItems([newItem, ...clothingItems]);
+        setClothingItems([newItem.data, ...clothingItems]);
         closeActiveModal();
       })
       .catch((error) => {
@@ -116,26 +115,21 @@ function App() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
+    const token = getToken();
     if (token) {
       auth
         .checkToken(token)
-        .then((res) => {
-          if (res.valid) {
-            setIsLoggedIn(true);
-            setCurrentUser(res.user);
-          } else {
-            localStorage.removeItem("jwt");
-            setIsLoggedIn(false);
-          }
+        .then((user) => {
+          setIsLoggedIn(true);
+          setCurrentUser(user);
         })
         .catch((error) => {
           console.error("Token validation failed", error);
-          localStorage.removeItem("jwt");
+          removeToken();
           setIsLoggedIn(false);
         });
     }
-  }, []);
+  }, [isLoggedIn]);
 
   useEffect(() => {
     getWeather(coordinates, APIkey)

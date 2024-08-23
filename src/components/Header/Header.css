@@ -22,6 +22,12 @@
   align-items: center;
   justify-content: flex-start;
 }
+.header__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
 .header__register {
   font-family: "Cabinet Grotesk", Arial, sans-serif;
   font-weight: 700;
@@ -59,6 +65,9 @@
   font-weight: 700;
   border: none;
   cursor: pointer;
+}
+.header__add-clothes-btn:hover {
+  color: #555;
 }
 .header__user-container {
   display: flex;

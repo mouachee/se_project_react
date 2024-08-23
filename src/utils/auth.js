@@ -1,4 +1,5 @@
 import { checkError } from "./api";
+import { getToken } from "./token";
 
 const baseUrl = "http://localhost:3001";
 
@@ -31,5 +32,18 @@ export const checkToken = (token) => {
       "Content-Type": "application/json",
       authorization: `Bearer ${token}`,
     },
+  }).then(checkError);
+};
+
+export const editUserInfo = (name, avatar) => {
+  const token = getToken();
+  return fetch(`${baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ name, avatar }),
   }).then(checkError);
 };

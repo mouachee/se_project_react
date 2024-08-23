@@ -11,10 +11,11 @@ import { getWeather, filterweatherData } from "../../utils/weatherApi";
 import CurrentTempChangeUnitContext from "../../contexts/CurrentTempChangeUnitContext";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
 import AddItemModal from "../AddItemModal/AddItemModal";
-import { getItems, addItem, deleteItem } from "../../utils/api";
+import * as api from "../../utils/api";
 import DeleteConfirmModal from "../DeleteConfirmModal/DeleteConfirmModal";
 import Login from "../LoginModal/LoginModal";
 import Register from "../RegisterModal/RegisterModal";
+import EditProfile from "../EditProfileModal/EditProfileModal";
 import * as auth from "../../utils/auth";
 import { setToken, getToken, removeToken } from "../../utils/token";
 import ProtectecRoute from "../ProtectedRoute/ProtectedRoute";
@@ -39,6 +40,23 @@ function App() {
   const handleRegisterClick = () => {
     setActiveModal("register");
   };
+  const handleCardClick = (card) => {
+    setActiveModal("preview");
+    setSelectedCard(card);
+  };
+  const handleAddClick = () => {
+    setActiveModal("add-garment");
+  };
+  const handleDeleteClick = () => {
+    setActiveModal("delete-garment");
+  };
+  const handleLoginClick = () => {
+    setActiveModal("login");
+  };
+  const handleEditProfileClick = () => {
+    setActiveModal("edit-profile");
+  };
+
   const handleRegistration = ({ name, avatar, email, password }) => {
     auth
       .register(name, avatar, email, password)
@@ -47,14 +65,10 @@ function App() {
         setIsLoggedIn(true);
         setCurrentUser(data);
         closeActiveModal();
-        navigate("/");
+        navigate("/profile");
       })
       .catch((err) => console.error("Registration failed", err));
   };
-  const handleLoginClick = () => {
-    setActiveModal("login");
-  };
-
   const handleLogin = ({ email, password }) => {
     if (!email || !password) {
       return;
@@ -66,25 +80,24 @@ function App() {
         setIsLoggedIn(true);
         setCurrentUser(data);
         closeActiveModal();
-        navigate("/");
+        navigate("/profile");
       })
       .catch((error) => {
         console.error("Login failed", error);
       });
   };
-
-  const handleCardClick = (card) => {
-    setActiveModal("preview");
-    setSelectedCard(card);
-  };
-  const handleAddClick = () => {
-    setActiveModal("add-garment");
-  };
-  const handleDeleteClick = () => {
-    setActiveModal("delete-garment");
+  const handleEditProfile = ({ name, avatar }) => {
+    auth
+      .editUserInfo(name, avatar)
+      .then((user) => {
+        setCurrentUser(user);
+        closeActiveModal();
+      })
+      .catch(console.error);
   };
   const handleDeleteItem = () => {
-    deleteItem(selectedCard._id)
+    api
+      .deleteItem(selectedCard._id)
       .then(() => {
         setClothingItems((prevItem) =>
           prevItem.filter((item) => item._id !== selectedCard._id)
@@ -96,7 +109,8 @@ function App() {
       });
   };
   const handleAddItemSubmit = (item) => {
-    addItem(item)
+    api
+      .addItem(item)
       .then((newItem) => {
         setClothingItems([newItem.data, ...clothingItems]);
         closeActiveModal();
@@ -104,6 +118,27 @@ function App() {
       .catch((error) => {
         console.error("failed uploading card", error);
       });
+  };
+
+  const handleCardLike = ({ id, isLiked }) => {
+    const token = getToken();
+    !isLiked
+      ? api
+          .addCardLike(id, token)
+          .then((updatedCard) => {
+            setClothingItems((cards) =>
+              cards.map((item) => (item._id === id ? updatedCard : item))
+            );
+          })
+          .catch((err) => console.log(err))
+      : api
+          .removeCardLike(id, token)
+          .then((updatedCard) => {
+            setClothingItems((cards) =>
+              cards.map((item) => (item._id === id ? updatedCard : item))
+            );
+          })
+          .catch((err) => console.log(err));
   };
   const closeActiveModal = () => {
     setActiveModal("");
@@ -140,7 +175,8 @@ function App() {
       .catch(console.error);
   }, []);
   useEffect(() => {
-    getItems()
+    api
+      .getItems()
       .then((data) => {
         console.log(data);
         setClothingItems(data);
@@ -171,17 +207,19 @@ function App() {
                     handleCardClick={handleCardClick}
                     weatherData={weatherData}
                     clothingItems={clothingItems}
+                    onCardLike={handleCardLike}
                   />
                 }
               />
               <Route
                 path="/profile"
                 element={
-                  <ProtectecRoute>
+                  <ProtectecRoute isLoggedIn={isLoggedIn}>
                     <Profile
                       handleCardClick={handleCardClick}
                       clothingItems={clothingItems}
                       handleAddClick={handleAddClick}
+                      handleEditProfileClick={handleEditProfileClick}
                     />
                   </ProtectecRoute>
                 }
@@ -223,6 +261,13 @@ function App() {
               closeActiveModal={closeActiveModal}
               activeModal={activeModal}
               handleLoginClick={handleLoginClick}
+            />
+          )}
+          {activeModal === "edit-profile" && (
+            <EditProfile
+              closeActiveModal={closeActiveModal}
+              activeModal={activeModal}
+              handleEditProfile={handleEditProfile}
             />
           )}
         </CurrentTempChangeUnitContext.Provider>

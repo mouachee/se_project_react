@@ -33,7 +33,7 @@ function deleteItem(itemId) {
   }).then(checkError);
 }
 function addCardLike(itemId) {
-  return fetch(`${baseUrl}/${itemId}/likes`, {
+  return fetch(`${baseUrl}/items/${itemId}/likes`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -42,7 +42,7 @@ function addCardLike(itemId) {
   }).then(checkError);
 }
 function removeCardLike(itemId) {
-  return fetch(`${baseUrl}/${itemId}/likes`, {
+  return fetch(`${baseUrl}/items/${itemId}/likes`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

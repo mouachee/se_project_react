@@ -120,7 +120,8 @@ function App() {
       });
   };
 
-  const handleCardLike = ({ id, isLiked }) => {
+  const handleCardLike = ({ _id, isLiked }) => {
+    const id = _id;
     const token = getToken();
     !isLiked
       ? api

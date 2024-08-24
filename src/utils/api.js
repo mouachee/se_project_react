@@ -1,7 +1,6 @@
 import { getToken } from "./token";
 
 const baseUrl = "http://localhost:3001";
-const token = getToken();
 
 export const checkError = (res) => {
   return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);
@@ -10,6 +9,8 @@ function getItems() {
   return fetch(`${baseUrl}/items`).then(checkError);
 }
 function addItem({ name, imageUrl, weather }) {
+  const token = getToken();
+
   return fetch(`${baseUrl}/items`, {
     method: "POST",
     headers: {
@@ -24,6 +25,8 @@ function addItem({ name, imageUrl, weather }) {
   }).then(checkError);
 }
 function deleteItem(itemId) {
+  const token = getToken();
+
   return fetch(`${baseUrl}/items/${itemId}`, {
     method: "DELETE",
     headers: {
@@ -33,6 +36,7 @@ function deleteItem(itemId) {
   }).then(checkError);
 }
 function addCardLike(itemId) {
+  const token = getToken();
   return fetch(`${baseUrl}/items/${itemId}/likes`, {
     method: "PUT",
     headers: {
@@ -42,6 +46,8 @@ function addCardLike(itemId) {
   }).then(checkError);
 }
 function removeCardLike(itemId) {
+  const token = getToken();
+
   return fetch(`${baseUrl}/items/${itemId}/likes`, {
     method: "DELETE",
     headers: {

@@ -5,7 +5,12 @@ import CurrentUserContext from "../../contexts/CurrentUserContext";
 
 //import { defaultClothingItems } from "../../utils/constants";
 
-function ClothesSection({ handleCardClick, clothingItems, handleAddClick }) {
+function ClothesSection({
+  handleCardClick,
+  clothingItems,
+  handleAddClick,
+  onCardLike,
+}) {
   const currentUser = useContext(CurrentUserContext);
 
   const userItems = clothingItems.filter(
@@ -26,6 +31,7 @@ function ClothesSection({ handleCardClick, clothingItems, handleAddClick }) {
               key={item._id}
               item={item}
               onCardClick={handleCardClick}
+              onCardLike={onCardLike}
             />
           );
         })}

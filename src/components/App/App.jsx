@@ -34,6 +34,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({});
   const [currentTempChangeUnit, setCurrentTempChangeUnit] = useState("F");
   const [clothingItems, setClothingItems] = useState([]);
+  const [isLiked, setIsLiked] = useState(false);
 
   const navigate = useNavigate();
 
@@ -121,6 +122,8 @@ function App() {
   };
 
   const handleCardLike = ({ _id, isLiked }) => {
+    console.log("Before click:", isLiked);
+
     const id = _id;
     const token = getToken();
     !isLiked
@@ -186,8 +189,8 @@ function App() {
   }, []);
 
   return (
-    <div className="app">
-      <CurrentUserContext.Provider value={currentUser}>
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="app">
         <CurrentTempChangeUnitContext.Provider
           value={{ currentTempChangeUnit, handleToggleSwitchChange }}
         >
@@ -221,6 +224,7 @@ function App() {
                       clothingItems={clothingItems}
                       handleAddClick={handleAddClick}
                       handleEditProfileClick={handleEditProfileClick}
+                      onCardLike={handleCardLike}
                     />
                   </ProtectecRoute>
                 }
@@ -272,8 +276,8 @@ function App() {
             />
           )}
         </CurrentTempChangeUnitContext.Provider>
-      </CurrentUserContext.Provider>
-    </div>
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 

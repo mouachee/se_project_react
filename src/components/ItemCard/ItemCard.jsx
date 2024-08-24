@@ -14,7 +14,7 @@ function ItemCard({ item, onCardClick, onCardLike }) {
 
   const handleLike = (event) => {
     event.preventDefault();
-    onCardLike(item._id, isLiked);
+    onCardLike({ _id: item._id, isLiked });
   };
   return (
     <li className="card">

@@ -64,7 +64,7 @@ function App() {
       .then(() => auth.signin(email, password))
       .then((data) => {
         setIsLoggedIn(true);
-        setCurrentUser(data);
+        setCurrentUser(data.user);
         closeActiveModal();
         navigate("/profile");
       })
@@ -79,7 +79,10 @@ function App() {
       .then((data) => {
         setToken(data.token);
         setIsLoggedIn(true);
-        setCurrentUser(data);
+        return auth.checkToken(data.token);
+      })
+      .then((user) => {
+        setCurrentUser(user);
         closeActiveModal();
         navigate("/profile");
       })
@@ -122,8 +125,6 @@ function App() {
   };
 
   const handleCardLike = ({ _id, isLiked }) => {
-    console.log("Before click:", isLiked);
-
     const id = _id;
     const token = getToken();
     !isLiked
@@ -144,6 +145,13 @@ function App() {
           })
           .catch((err) => console.log(err));
   };
+
+  const handleLogOut = () => {
+    localStorage.removeItem("jwt");
+    setIsLoggedIn(false);
+    setCurrentUser({});
+  };
+
   const closeActiveModal = () => {
     setActiveModal("");
   };
@@ -225,6 +233,7 @@ function App() {
                       handleAddClick={handleAddClick}
                       handleEditProfileClick={handleEditProfileClick}
                       onCardLike={handleCardLike}
+                      handleLogOut={handleLogOut}
                     />
                   </ProtectecRoute>
                 }

@@ -7,7 +7,7 @@ function Profile({
   handleAddClick,
   handleEditProfileClick,
   onCardLike,
-  // handleLogOut,
+  handleLogOut,
 }) {
   return (
     <div className="profile">

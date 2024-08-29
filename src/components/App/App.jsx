@@ -35,7 +35,6 @@ function App() {
   const [currentTempChangeUnit, setCurrentTempChangeUnit] = useState("F");
   const [clothingItems, setClothingItems] = useState([]);
   const [isLiked, setIsLiked] = useState(false);
-
   const navigate = useNavigate();
 
   const handleRegisterClick = () => {

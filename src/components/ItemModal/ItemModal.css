@@ -7,6 +7,9 @@
   background-size: cover;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
+  width: 498px;
+  height: 498px;
+  object-fit: cover;
 }
 .modal__footer {
   margin: 20px 32px 32px;

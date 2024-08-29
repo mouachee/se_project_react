@@ -16,7 +16,6 @@ function Header({
     day: "numeric",
   });
   const currentUser = useContext(CurrentUserContext);
-  console.log(currentUser);
 
   return (
     <header className="header">

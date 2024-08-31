@@ -11,7 +11,6 @@ function ItemCard({ item, onCardClick, onCardLike }) {
   const handleCardClick = () => {
     onCardClick(item);
   };
-  // Hidden Like Button
   const handleLike = (event) => {
     event.preventDefault();
     onCardLike({ _id: item._id, isLiked });

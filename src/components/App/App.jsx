@@ -27,7 +27,6 @@ function App() {
     temp: { F: 999 },
     city: "",
   });
-  // loading submit
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -60,10 +59,17 @@ function App() {
   const handleRegistration = ({ name, avatar, email, password }) => {
     auth
       .register(name, avatar, email, password)
-      .then(() => auth.signin(email, password))
+      .then(() => {
+        return auth.signin(email, password);
+      })
       .then((data) => {
+        setToken(data.token);
         setIsLoggedIn(true);
-        setCurrentUser(data.user);
+        return auth.checkToken(data.token);
+      })
+      .then((userData) => {
+        console.log("user data", userData);
+        setCurrentUser(userData);
         closeActiveModal();
         navigate("/profile");
       })
@@ -218,7 +224,6 @@ function App() {
               <Route
                 path="/"
                 element={
-                  // pass clothing Items as a prop
                   <Main
                     handleCardClick={handleCardClick}
                     weatherData={weatherData}

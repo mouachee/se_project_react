@@ -50,7 +50,7 @@ function Header({
                   />
                 ) : (
                   <div className="header__avatar-placeholder">
-                    {currentUser?.name.charAt(0).toUpperCase()}
+                    {currentUser?.name?.charAt(0).toUpperCase() || ""}
                   </div>
                 )}
               </div>

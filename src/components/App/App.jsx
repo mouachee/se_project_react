@@ -27,14 +27,14 @@ function App() {
     temp: { F: 999 },
     city: "",
   });
-
+  // loading submit
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [activeModal, setActiveModal] = useState("");
   const [selectedCard, setSelectedCard] = useState({});
-  const [currentTempChangeUnit, setCurrentTempChangeUnit] = useState("F");
   const [clothingItems, setClothingItems] = useState([]);
-  const [isLiked, setIsLiked] = useState(false);
+  const [currentTempChangeUnit, setCurrentTempChangeUnit] = useState("F");
   const navigate = useNavigate();
 
   const handleRegisterClick = () => {
@@ -89,15 +89,31 @@ function App() {
         console.error("Login failed", error);
       });
   };
-  const handleEditProfile = ({ name, avatar }) => {
-    auth
-      .editUserInfo(name, avatar)
-      .then((user) => {
-        setCurrentUser(user);
-        closeActiveModal();
-      })
-      .catch(console.error);
+  const handleSubmit = (request) => {
+    setIsLoading(true);
+    request()
+      .then(closeActiveModal)
+      .catch(console.error)
+      .finally(() => setIsLoading(false));
   };
+
+  const handleEditProfile = ({ name, avatar }) => {
+    const makeRequest = () => {
+      return auth.editUserInfo(name, avatar).then((user) => {
+        setCurrentUser(user);
+      });
+    };
+    handleSubmit(makeRequest);
+  };
+  const handleAddItemSubmit = (item) => {
+    const makeRequest = () => {
+      return api.addItem(item).then((newItem) => {
+        setClothingItems([newItem, ...clothingItems]);
+      });
+    };
+    handleSubmit(makeRequest);
+  };
+
   const handleDeleteItem = () => {
     api
       .deleteItem(selectedCard._id)
@@ -109,17 +125,6 @@ function App() {
       })
       .catch((error) => {
         console.error("Failed to delete item:", error);
-      });
-  };
-  const handleAddItemSubmit = (item) => {
-    api
-      .addItem(item)
-      .then((newItem) => {
-        setClothingItems([newItem.data, ...clothingItems]);
-        closeActiveModal();
-      })
-      .catch((error) => {
-        console.error("failed uploading card", error);
       });
   };
 
@@ -134,7 +139,7 @@ function App() {
               cards.map((item) => (item._id === id ? updatedCard : item))
             );
           })
-          .catch((err) => console.log(err))
+          .catch(console.error)
       : api
           .removeCardLike(id, token)
           .then((updatedCard) => {
@@ -142,7 +147,7 @@ function App() {
               cards.map((item) => (item._id === id ? updatedCard : item))
             );
           })
-          .catch((err) => console.log(err));
+          .catch(console.error);
   };
 
   const handleLogOut = () => {
@@ -241,48 +246,43 @@ function App() {
             <Footer />
           </div>
           <AddItemModal
+            isLoading={isLoading}
             closeActiveModal={closeActiveModal}
             isOpen={activeModal === "add-garment"}
             onAddItem={handleAddItemSubmit}
           />
-          {activeModal === "preview" && (
-            <ItemModal
-              activeModal={activeModal}
-              card={selectedCard}
-              handleCloseClick={closeActiveModal}
-              handleDeleteClick={handleDeleteClick}
-            />
-          )}
-          {activeModal === "delete-garment" && (
-            <DeleteConfirmModal
-              activeModal={activeModal}
-              handleCloseClick={closeActiveModal}
-              onDelete={handleDeleteItem}
-            />
-          )}
-          {activeModal === "login" && (
-            <Login
-              closeActiveModal={closeActiveModal}
-              activeModal={activeModal}
-              handleRegisterClick={handleRegisterClick}
-              handleLogin={handleLogin}
-            />
-          )}
-          {activeModal === "register" && (
-            <Register
-              handleRegistration={handleRegistration}
-              closeActiveModal={closeActiveModal}
-              activeModal={activeModal}
-              handleLoginClick={handleLoginClick}
-            />
-          )}
-          {activeModal === "edit-profile" && (
-            <EditProfile
-              closeActiveModal={closeActiveModal}
-              activeModal={activeModal}
-              handleEditProfile={handleEditProfile}
-            />
-          )}
+
+          <ItemModal
+            isOpen={activeModal === "preview"}
+            card={selectedCard}
+            handleCloseClick={closeActiveModal}
+            handleDeleteClick={handleDeleteClick}
+          />
+
+          <DeleteConfirmModal
+            isOpen={activeModal === "delete-garment"}
+            handleCloseClick={closeActiveModal}
+            onDelete={handleDeleteItem}
+          />
+
+          <Login
+            isOpen={activeModal === "login"}
+            closeActiveModal={closeActiveModal}
+            handleRegisterClick={handleRegisterClick}
+            handleLogin={handleLogin}
+          />
+          <Register
+            handleRegistration={handleRegistration}
+            isOpen={activeModal === "register"}
+            closeActiveModal={closeActiveModal}
+            handleLoginClick={handleLoginClick}
+          />
+          <EditProfile
+            isLoading={isLoading}
+            isOpen={activeModal === "edit-profile"}
+            closeActiveModal={closeActiveModal}
+            handleEditProfile={handleEditProfile}
+          />
         </CurrentTempChangeUnitContext.Provider>
       </div>
     </CurrentUserContext.Provider>

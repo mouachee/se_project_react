@@ -8,6 +8,9 @@ function ModalWithForm({
   isOpen,
   onSubmit,
   isSubmitDisabled,
+  showLink,
+  linkText,
+  onLinkClick,
 }) {
   return (
     <div className={`modal ${isOpen && "modal_opened"}`}>
@@ -20,15 +23,22 @@ function ModalWithForm({
         />
         <form className="modal__form" onSubmit={onSubmit}>
           {children}
-          <button
-            type="submit"
-            className={`modal__submit ${
-              isSubmitDisabled && "modal__submit_disabled"
-            }`}
-            disabled={isSubmitDisabled}
-          >
-            {buttonText}
-          </button>
+          <div className="modal__actions">
+            <button
+              type="submit"
+              className={`modal__submit ${
+                isSubmitDisabled && "modal__submit_disabled"
+              }`}
+              disabled={isSubmitDisabled}
+            >
+              {buttonText}
+            </button>
+            {showLink && (
+              <span onClick={onLinkClick} className="modal__link">
+                {linkText}
+              </span>
+            )}
+          </div>
         </form>
       </div>
     </div>

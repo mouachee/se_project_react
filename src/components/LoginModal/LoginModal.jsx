@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../ModalWithForm/ModalWithForm.css";
+import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
 const Login = ({
-  activeModal,
+  isOpen,
   closeActiveModal,
   handleRegisterClick,
   handleLogin,
@@ -25,55 +26,43 @@ const Login = ({
     handleLogin(data);
   };
   return (
-    <div className={`modal ${activeModal === "login" && "modal_opened"}`}>
-      <div className="modal__content">
-        <h2 className="modal__title">Log In</h2>
-        <button
-          onClick={closeActiveModal}
-          type="button"
-          className="modal__close"
+    <ModalWithForm
+      isOpen={isOpen}
+      handleCloseClick={closeActiveModal}
+      onSubmit={onLoginSubmit}
+      title="Log In"
+      buttonText="Log In"
+      showLink={true}
+      linkText="or Sign Up"
+      onLinkClick={handleRegisterClick}
+    >
+      <label htmlFor="email" className="modal__label">
+        Email{""}
+        <input
+          className="modal__input"
+          id="email"
+          required
+          name="email"
+          type="email"
+          placeholder="Email"
+          value={data.email}
+          onChange={handleChange}
         />
-        <form className="modal__form" onSubmit={onLoginSubmit}>
-          <label htmlFor="email" className="modal__label">
-            Email{""}
-            <input
-              className="modal__input"
-              id="email"
-              required
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={data.email}
-              onChange={handleChange}
-            />
-          </label>
-          <label htmlFor="password" className="modal__label">
-            Password{""}
-            <input
-              className="modal__input"
-              id="password"
-              required
-              name="password"
-              type="password"
-              placeholder="Password"
-              value={data.password}
-              onChange={handleChange}
-            />
-          </label>
-          <div className="modal__actions">
-            <button
-              type="submit"
-              className="modal__submit modal__submit--login"
-            >
-              <span>Login</span>
-            </button>
-            <span onClick={handleRegisterClick} className="modal__link">
-              or Sign Up
-            </span>
-          </div>
-        </form>
-      </div>
-    </div>
+      </label>
+      <label htmlFor="password" className="modal__label">
+        Password{""}
+        <input
+          className="modal__input"
+          id="password"
+          required
+          name="password"
+          type="password"
+          placeholder="Password"
+          value={data.password}
+          onChange={handleChange}
+        />
+      </label>
+    </ModalWithForm>
   );
 };
 export default Login;

@@ -30,3 +30,18 @@ export function useFormAndValidation() {
     setIsValid,
   };
 }
+
+export const validateUrl = (url) => {
+  const urlPattern =
+    /^(https?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\*\+,;=.]+$/;
+  return urlPattern.test(url);
+};
+
+export const validateImageUrl = (url) => {
+  return fetch(url)
+    .then((response) => {
+      const contentType = response.headers.get("content-type");
+      return response.ok && contentType && contentType.startsWith("image/");
+    })
+    .catch(() => false);
+};

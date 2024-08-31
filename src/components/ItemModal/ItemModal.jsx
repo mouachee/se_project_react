@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import "./ItemModal.css";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
-function ItemModal({ activeModal, handleCloseClick, card, handleDeleteClick }) {
+function ItemModal({ isOpen, handleCloseClick, card, handleDeleteClick }) {
   const currentUser = useContext(CurrentUserContext);
 
   const isOwn = currentUser && card.owner === currentUser._id;
@@ -11,7 +11,7 @@ function ItemModal({ activeModal, handleCloseClick, card, handleDeleteClick }) {
   }`;
 
   return (
-    <div className={`modal ${activeModal === "preview" && "modal_opened"}`}>
+    <div className={`modal ${isOpen && "modal_opened"}`}>
       <div className="modal__content modal__content_type_image">
         <button
           onClick={handleCloseClick}

@@ -108,14 +108,11 @@
   margin-top: 32px;
   height: 36px;
   cursor: pointer;
-  width: 124px;
+  padding: 8px 16px;
+  display: inline-block;
+  width: fit-content;
 }
-.modal__submit--login {
-  width: 86px;
-}
-.modal__submit--register {
-  width: 86px;
-}
+
 .modal__submit_disabled {
   background-color: rgba(0, 0, 0, 0.3);
 }
@@ -134,4 +131,10 @@
 }
 .modal__link:hover {
   color: #000000cc;
+}
+.modal__error {
+  font-family: "Cabinet Grotesk", Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #ff4d00;
 }

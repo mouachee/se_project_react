@@ -1,7 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import CurrentUserContext from "../../contexts/CurrentUserContext";
+import ModalWithForm from "../ModalWithForm/ModalWithForm";
 
-const EditProfile = ({ activeModal, closeActiveModal, handleEditProfile }) => {
+const EditProfile = ({
+  isOpen,
+  closeActiveModal,
+  handleEditProfile,
+  isLoading,
+}) => {
   const currentUser = useContext(CurrentUserContext);
 
   const [name, setName] = useState("");
@@ -26,47 +32,38 @@ const EditProfile = ({ activeModal, closeActiveModal, handleEditProfile }) => {
     handleEditProfile({ name, avatar });
   };
   return (
-    <div
-      className={`modal ${activeModal === "edit-profile" && "modal_opened"}`}
+    <ModalWithForm
+      handleCloseClick={closeActiveModal}
+      onSubmit={handleSubmit}
+      isOpen={isOpen}
+      title="Change profile data"
+      buttonText={isLoading ? "Saving..." : "Save changes"}
     >
-      <div className="modal__content">
-        <h2 className="modal__title">Change profile data</h2>
-        <button
-          onClick={closeActiveModal}
-          type="button"
-          className="modal__close"
+      <label htmlFor="name" className="modal__label">
+        Name{""}
+        <input
+          className="modal__input"
+          id="name"
+          required
+          name="name"
+          type="text"
+          value={name}
+          onChange={handleNameChange}
         />
-        <form className="modal__form" onSubmit={handleSubmit}>
-          <label htmlFor="name" className="modal__label">
-            Name{""}
-            <input
-              className="modal__input"
-              id="name"
-              required
-              name="name"
-              type="name"
-              value={name}
-              onChange={handleNameChange}
-            />
-          </label>
-          <label htmlFor="avatar" className="modal__label">
-            Avatar{""}
-            <input
-              className="modal__input"
-              id="avatar"
-              required
-              name="avatar"
-              type="avatar"
-              value={avatar}
-              onChange={handleAvatarChange}
-            />
-          </label>
-          <button type="submit" className="modal__submit modal__submit--edit">
-            <span>Save changes</span>
-          </button>
-        </form>
-      </div>
-    </div>
+      </label>
+      <label htmlFor="avatar" className="modal__label">
+        Avatar{""}
+        <input
+          className="modal__input"
+          id="avatar"
+          required
+          name="avatar"
+          type="url"
+          value={avatar}
+          onChange={handleAvatarChange}
+        />
+      </label>
+    </ModalWithForm>
   );
 };
 

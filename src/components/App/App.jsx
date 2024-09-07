@@ -20,6 +20,7 @@ import * as auth from "../../utils/auth";
 import { setToken, getToken, removeToken } from "../../utils/token";
 import ProtectecRoute from "../ProtectedRoute/ProtectedRoute";
 import "./App.css";
+import { Modal } from "../Modal/Modal";
 
 function App() {
   const [weatherData, setWeatherData] = useState({
@@ -77,9 +78,9 @@ function App() {
   };
   const handleLogin = ({ email, password }) => {
     if (!email || !password) {
-      return;
+      return Promise.reject(new Error("Email and password are required"));
     }
-    auth
+    return auth
       .signin(email, password)
       .then((data) => {
         setToken(data.token);
@@ -93,6 +94,7 @@ function App() {
       })
       .catch((error) => {
         console.error("Login failed", error);
+        throw error;
       });
   };
   const handleSubmit = (request) => {
@@ -114,7 +116,7 @@ function App() {
   const handleAddItemSubmit = (item) => {
     const makeRequest = () => {
       return api.addItem(item).then((newItem) => {
-        setClothingItems([newItem, ...clothingItems]);
+        setClothingItems((prevItem) => [newItem.data, ...prevItem]);
       });
     };
     handleSubmit(makeRequest);
@@ -159,7 +161,7 @@ function App() {
   const handleLogOut = () => {
     localStorage.removeItem("jwt");
     setIsLoggedIn(false);
-    setCurrentUser({});
+    setCurrentUser(null);
   };
 
   const closeActiveModal = () => {

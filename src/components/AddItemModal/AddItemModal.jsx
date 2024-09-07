@@ -6,67 +6,69 @@ import {
   validateUrl,
 } from "../../hooks/useFormAndValidation";
 const AddItemModal = ({ closeActiveModal, onAddItem, isOpen, isLoading }) => {
-  const { values, handleChange, isValid, resetForm } = useFormAndValidation();
+  const { values, handleChange, resetForm } = useFormAndValidation();
 
   const [isImageValid, setIsImageValid] = useState(false);
   const [isNameValid, setIsNameValid] = useState(true);
   const [imageUrlError, setImageUrlError] = useState("");
   const [nameError, setNameError] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       resetForm();
       setIsImageValid(false);
+      setIsNameValid(true);
       setNameError("");
       setImageUrlError("");
+      setIsSubmitted(false);
     }
   }, [isOpen, resetForm]);
 
-  useEffect(() => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitted(true);
+
     const name = values.name || "";
-    if (name === "") {
-      setIsNameValid(true);
-      setNameError("");
-    } else if (values.name.length < 2 || values.name.length > 30) {
+
+    if (name.length < 2 || name.length > 30) {
       setIsNameValid(false);
       setNameError("Name must be between 2 and 30 characters.");
+      return;
     } else {
       setIsNameValid(true);
       setNameError("");
     }
-  }, [values.name]);
 
-  useEffect(() => {
     if (values.imageUrl) {
       if (validateUrl(values.imageUrl)) {
         validateImageUrl(values.imageUrl).then((isValid) => {
-          setIsImageValid(isValid);
-          setImageUrlError(isValid ? "" : "Please enter a valid image URL.");
+          if (isValid) {
+            setIsImageValid(true);
+            setImageUrlError("");
+
+            if (values.weather) {
+              onAddItem({
+                name: values.name,
+                imageUrl: values.imageUrl,
+                weather: values.weather,
+              });
+              closeActiveModal();
+            }
+          } else {
+            setImageUrlError("Please enter a valid image URL.");
+            setIsImageValid(false);
+          }
         });
       } else {
-        setIsImageValid(false);
         setImageUrlError("Please enter a valid image URL.");
+        setIsImageValid(false);
       }
     } else {
-      setIsImageValid(false);
       setImageUrlError("");
     }
-  }, [values.imageUrl]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (isValid && isImageValid && values.weather) {
-      onAddItem({
-        name: values.name,
-        imageUrl: values.imageUrl,
-        weather: values.weather,
-      });
-      closeActiveModal();
-    }
   };
-  const isSubmitDisabled =
-    !isValid || !isImageValid || !isNameValid || !values.weather;
+  const isSubmitDisabled = !values.name || !values.imageUrl || !values.weather;
 
   return (
     <ModalWithForm
@@ -78,32 +80,41 @@ const AddItemModal = ({ closeActiveModal, onAddItem, isOpen, isLoading }) => {
       isSubmitDisabled={isSubmitDisabled}
     >
       <label htmlFor="Name" className="modal__label">
-        Name{" "}
+        {isSubmitted && nameError ? (
+          <span className="modal__error">{nameError}</span>
+        ) : (
+          "Name"
+        )}
         <input
           name="name"
           type="text"
-          className="modal__input"
-          id="Name"
+          className={`modal__input ${nameError ? "modal__input_error" : ""}`}
+          id="name-addItem"
           placeholder="Name"
           value={values.name || ""}
           onChange={handleChange}
           required
         />
-        {nameError && <span className="modal__error">{nameError}</span>}
       </label>
       <label htmlFor="ImageUrl" className="modal__label">
-        Image{" "}
+        {isSubmitted && imageUrlError ? (
+          <span className="modal__error">{imageUrlError}</span>
+        ) : (
+          "Image"
+        )}
+
         <input
           name="imageUrl"
           type="url"
-          className="modal__input"
+          className={`modal__input ${
+            imageUrlError ? "modal__input_error" : ""
+          }`}
           id="ImageUrl"
           placeholder="Image URL"
           value={values.imageUrl || ""}
           onChange={handleChange}
           required
         />
-        {imageUrlError && <span className="modal__error">{imageUrlError}</span>}
       </label>
       <fieldset className="modal__radio-buttons">
         <legend className="modal__legend">Select the weather type:</legend>

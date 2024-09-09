@@ -81,7 +81,7 @@ const EditProfile = ({
       title="Change profile data"
       buttonText={isLoading ? "Saving..." : "Save changes"}
     >
-      <label htmlFor="name" className="modal__label">
+      <label htmlFor="name-edit" className="modal__label">
         {nameError ? <span className="modal__error">{nameError}</span> : "Name"}
         <input
           className="modal__input"
@@ -93,7 +93,7 @@ const EditProfile = ({
           onChange={handleChange}
         />
       </label>
-      <label htmlFor="avatar" className="modal__label">
+      <label htmlFor="avatar-edit" className="modal__label">
         {avatarError ? (
           <span className="modal__error">{avatarError}</span>
         ) : (

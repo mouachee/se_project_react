@@ -48,7 +48,7 @@ const Login = ({
       onLinkClick={handleRegisterClick}
       isSubmitDisabled={!isValid}
     >
-      <label htmlFor="email" className="modal__label">
+      <label htmlFor="email-login" className="modal__label">
         Email{""}
         <input
           className="modal__input"
@@ -61,7 +61,7 @@ const Login = ({
           onChange={handleChange}
         />
       </label>
-      <label htmlFor="password" className="modal__label">
+      <label htmlFor="password-login" className="modal__label">
         {error ? <span className="modal__error">{error}</span> : "Password"}
 
         <input

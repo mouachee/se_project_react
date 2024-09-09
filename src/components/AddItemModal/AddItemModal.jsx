@@ -6,7 +6,7 @@ import {
   validateUrl,
 } from "../../hooks/useFormAndValidation";
 const AddItemModal = ({ closeActiveModal, onAddItem, isOpen, isLoading }) => {
-  const { values, handleChange, resetForm } = useFormAndValidation();
+  const { values, handleChange, resetForm, isValid } = useFormAndValidation();
 
   const [isImageValid, setIsImageValid] = useState(false);
   const [isNameValid, setIsNameValid] = useState(true);
@@ -68,7 +68,7 @@ const AddItemModal = ({ closeActiveModal, onAddItem, isOpen, isLoading }) => {
       setImageUrlError("");
     }
   };
-  const isSubmitDisabled = !values.name || !values.imageUrl || !values.weather;
+  const isSubmitDisabled = !isValid;
 
   return (
     <ModalWithForm
@@ -79,7 +79,7 @@ const AddItemModal = ({ closeActiveModal, onAddItem, isOpen, isLoading }) => {
       buttonText={isLoading ? "Adding..." : "Add garment"}
       isSubmitDisabled={isSubmitDisabled}
     >
-      <label htmlFor="Name" className="modal__label">
+      <label htmlFor="name-addItem" className="modal__label">
         {isSubmitted && nameError ? (
           <span className="modal__error">{nameError}</span>
         ) : (

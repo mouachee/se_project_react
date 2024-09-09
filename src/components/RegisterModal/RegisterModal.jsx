@@ -87,7 +87,7 @@ const Register = ({
       onLinkClick={handleLoginClick}
       isSubmitDisabled={isSubmitDisabled}
     >
-      <label htmlFor="email" className="modal__label">
+      <label htmlFor="email-register" className="modal__label">
         Email{""}
         <input
           className="modal__input"
@@ -100,7 +100,7 @@ const Register = ({
           onChange={handleChange}
         />
       </label>
-      <label htmlFor="password" className="modal__label">
+      <label htmlFor="password-register" className="modal__label">
         Password{""}
         <input
           className="modal__input"

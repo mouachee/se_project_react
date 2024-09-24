@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import "../ModalWithForm/ModalWithForm.css";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import { useFormAndValidation } from "../../hooks/useFormAndValidation";
@@ -10,30 +9,18 @@ const Login = ({
   handleRegisterClick,
   handleLogin,
 }) => {
-  const { values, handleChange, isValid, resetForm } = useFormAndValidation();
-  const [error, setError] = useState("");
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormAndValidation();
 
   useEffect(() => {
     if (isOpen) {
       resetForm();
-      setError("");
     }
-  }, [isOpen, resetForm]);
-
+  }, [isOpen]);
   const onLoginSubmit = (e) => {
     e.preventDefault();
     if (isValid) {
-      handleLogin(values)
-        .then(() => {
-          setError("");
-        })
-        .catch((error) => {
-          if (error.message === "Incorrect email or password") {
-            setError("Incorrect password or email");
-          } else {
-            setError("Incorrect password or email");
-          }
-        });
+      handleLogin(values);
     }
   };
   return (
@@ -50,6 +37,7 @@ const Login = ({
     >
       <label htmlFor="email-login" className="modal__label">
         Email{""}
+        <span className="modal__error">{errors.email}</span>
         <input
           className="modal__input"
           id="email-login"
@@ -62,10 +50,10 @@ const Login = ({
         />
       </label>
       <label htmlFor="password-login" className="modal__label">
-        {error ? <span className="modal__error">{error}</span> : "Password"}
-
+        Password{""}
+        <span className="modal__error">{errors.password}</span>
         <input
-          className={`modal__input ${error ? "modal__input_error" : ""}`}
+          className="modal__input"
           id="password-login"
           required
           name="password"

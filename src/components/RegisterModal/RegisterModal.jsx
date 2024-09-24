@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
-import {
-  validateImageUrl,
-  validateUrl,
-  useFormAndValidation,
-} from "../../hooks/useFormAndValidation";
+import { useFormAndValidation } from "../../hooks/useFormAndValidation";
 
 const Register = ({
   handleRegistration,
@@ -12,69 +8,21 @@ const Register = ({
   closeActiveModal,
   handleLoginClick,
 }) => {
-  const { values, handleChange, resetForm } = useFormAndValidation();
-
-  const [isAvatarValid, setAvatarValid] = useState(false);
-  const [isNameValid, setIsNameValid] = useState(true);
-  const [avatarError, setAvatarError] = useState("");
-  const [nameError, setNameError] = useState("");
+  const { values, handleChange, isValid, resetForm, errors } =
+    useFormAndValidation();
 
   useEffect(() => {
     if (isOpen) {
-      resetForm({ email: "", password: "", name: "", avatar: "" });
-      setAvatarValid(false);
-      setIsNameValid(true);
-      setNameError("");
-      setAvatarError("");
+      resetForm();
     }
-  }, [isOpen, resetForm]);
-
+  }, [isOpen]);
   const onRegisterSubmit = (e) => {
     e.preventDefault();
-
-    const name = values.name || "";
-
-    if (name.length < 2 || name.length > 30) {
-      setIsNameValid(false);
-      setNameError("Name must be between 2 and 30 characters.");
-    } else {
-      setIsNameValid(true);
-      setNameError("");
-    }
-
-    if (values.avatar) {
-      if (validateUrl(values.avatar)) {
-        validateImageUrl(values.avatar)
-          .then((isValid) => {
-            if (isValid) {
-              setAvatarValid(true);
-              setAvatarError("");
-            } else {
-              setAvatarError("Please enter a valid image URL.");
-              setAvatarValid(false);
-            }
-          })
-          .catch(() => {
-            setAvatarError("The URL is invalid.");
-            setAvatarValid(false);
-          })
-          .finally(() => {
-            if (isNameValid && isAvatarValid) {
-              handleRegistration(values);
-            }
-          });
-      } else {
-        setAvatarError("Please enter a valid image URL.");
-        setAvatarValid(false);
-      }
-    } else {
-      if (isNameValid) {
-        handleRegistration(values);
-      }
+    if (isValid) {
+      handleRegistration(values);
     }
   };
-  const isSubmitDisabled =
-    !values.email || !values.password || !values.name || !values.avatar;
+
   return (
     <ModalWithForm
       isOpen={isOpen}
@@ -85,10 +33,11 @@ const Register = ({
       showLink={true}
       linkText="or Log In"
       onLinkClick={handleLoginClick}
-      isSubmitDisabled={isSubmitDisabled}
+      isSubmitDisabled={!isValid}
     >
       <label htmlFor="email-register" className="modal__label">
         Email{""}
+        <span className="modal__error">{errors.email}</span>
         <input
           className="modal__input"
           id="email-register"
@@ -102,6 +51,7 @@ const Register = ({
       </label>
       <label htmlFor="password-register" className="modal__label">
         Password{""}
+        <span className="modal__error">{errors.password}</span>
         <input
           className="modal__input"
           id="password-register"
@@ -114,7 +64,8 @@ const Register = ({
         />
       </label>
       <label htmlFor="name" className="modal__label">
-        {nameError ? <span className="modal__error">{nameError}</span> : "Name"}
+        Name{""}
+        <span className="modal__error">{errors.name}</span>
         <input
           className="modal__input"
           id="name-register"
@@ -127,11 +78,8 @@ const Register = ({
         />
       </label>
       <label htmlFor="avatar" className="modal__label">
-        {avatarError ? (
-          <span className="modal__error">{avatarError}</span>
-        ) : (
-          "Avatar URL"
-        )}
+        Avatar URL{""}
+        <span className="modal__error">{errors.avatar}</span>
         <input
           className="modal__input"
           id="avatar-register"

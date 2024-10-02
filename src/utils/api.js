@@ -1,6 +1,5 @@
 import { getToken } from "./token";
-
-const baseUrl = "http://localhost:3001";
+import { baseUrl } from "../utils/constants";
 
 export const checkError = (res) => {
   return res.ok ? res.json() : Promise.reject(`Error: ${res.status}`);

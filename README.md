@@ -18,3 +18,9 @@ This project utilizes an API and React to facilitate user interactions with the 
 This frontend project is linked to a backend API. You can find the backend repository here :
 
 [Backend Repository](https://github.com/mouachee/se_project_express.git)
+
+# Accessing the Application
+
+You can access the live version of this application using the following domain:
+
+**[wtwr-domain.ignorelist.com](http://wtwr-domain.ignorelist.com)**

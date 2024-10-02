@@ -114,3 +114,8 @@ export const coordinates = {
 };
 
 export const APIkey = "70d2eef46307972370b803eabcd2dec8";
+
+export const baseUrl =
+  process.env.NODE_ENV === "production"
+    ? "https://api.wtwr-domain.ignorelist.com"
+    : "http://localhost:3001";
